@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Tarefa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Tarefa</h1>
+        <form action="{{ url_for('edit_task', id=tarefa.id) }}" method="post">
+            <label for="nome">Nome da Tarefa:</label>
+            <input type="text" name="nome" value="{{ tarefa.nome }}" required>
+
+            <label for="custo">Custo (R$):</label>
+            <input type="number" step="0.01" name="custo" value="{{ tarefa.custo }}" required>
+
+            <label for="data_limite">Data Limite:</label>
+            <input type="date" name="data_limite" value="{{ tarefa.data_limite.strftime('%Y-%m-%d') }}" required>
+
+            <button type="submit" class="btn">Salvar Alterações</button>
+            <a href="{{ url_for('index') }}" class="btn">Cancelar</a>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <script>
+                    window.onload = function() {
+                        swal("Atenção!", "{{ messages[0] }}", "warning");
+                    }
+                </script>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

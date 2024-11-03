@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Tarefa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Nova Tarefa</h1>
+        <form action="{{ url_for('new_task') }}" method="post">
+            <label for="nome">Nome da Tarefa:</label>
+            <input type="text" name="nome" required>
+
+            <label for="custo">Custo (R$):</label>
+            <input type="number" step="0.01" name="custo" required>
+
+            <label for="data_limite">Data Limite:</label>
+            <input type="date" name="data_limite" required>
+
+            <button type="submit" class="btn">Adicionar Tarefa</button>
+            <a href="{{ url_for('index') }}" class="btn">Voltar</a>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <script>
+                    window.onload = function() {
+                        swal("Atenção!", "{{ messages[0] }}", "warning");
+                    }
+                </script>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
