@@ -39,6 +39,10 @@ h1 {
     background-color: #0056b3;
 }
 
+.info-btn {
+    float: right;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -64,16 +68,24 @@ th {
 }
 
 .action-btn {
-    color: #007bff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: #fff;
     text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #4CAF50; /* Cor de fundo verde para o botão Editar */
 }
 
 .delete-btn {
-    color: #dc3545;
+    background-color: #dc3545; /* Cor de fundo vermelho para o botão Excluir */
 }
 
-.action-btn:hover, .delete-btn:hover {
-    text-decoration: underline;
+.action-btn:hover {
+    opacity: 0.8;
 }
 
 form {

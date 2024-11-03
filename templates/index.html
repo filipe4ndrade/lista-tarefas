@@ -11,7 +11,10 @@
 <body>
     <div class="container">
         <h1>Lista de Tarefas</h1>
-        <a href="{{ url_for('new_task') }}" class="btn">Adicionar Nova Tarefa</a>
+        <div class="button-container">
+            <a href="{{ url_for('new_task') }}" class="btn">Adicionar Nova Tarefa</a>
+            <button onclick="showInfo()" class="btn info-btn">Informações</button>
+        </div>
         
         <table>
             <thead>
@@ -29,7 +32,7 @@
                         <td>{{ tarefa.custo }}</td>
                         <td>{{ tarefa.data_limite.strftime('%d/%m/%Y') }}</td>
                         <td>
-                            <a href="{{ url_for('edit_task', id=tarefa.id) }}" class="action-btn">✏️ Editar</a>
+                            <a href="{{ url_for('edit_task', id=tarefa.id) }}" class="action-btn edit-btn">✏️ Editar</a>
                             <form action="{{ url_for('delete_task', id=tarefa.id) }}" method="post" style="display:inline;">
                                 <button type="submit" class="action-btn delete-btn">🗑️ Excluir</button>
                             </form>
@@ -49,5 +52,17 @@
             {% endif %}
         {% endwith %}
     </div>
+
+    <script>
+        // Função para mostrar o popup com informações
+        function showInfo() {
+            swal({
+                title: "Informações do Sistema",
+                text: "Criado por José Filipe.\n\nSistema de gerenciamento de tarefas com funcionalidades de adição, edição e exclusão.\nOs nomes das tarefas não podem se repetir e quando houver um custo acima de R$ 1000.0, a tarefa deve ficar amarela.\nDesenvolvido em Python com Flask e SQLite.",
+                icon: "info",
+                button: "Fechar"
+            });
+        }
+    </script>
 </body>
 </html>
