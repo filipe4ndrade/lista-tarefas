@@ -55,7 +55,7 @@ def delete_task(id):
 # Edição de tarefa
 @app.route('/edit_task/<int:id>', methods=['GET', 'POST'])
 def edit_task(id):
-    tarefa = get_task_by_id(id)  # Função que busca a tarefa pelo ID
+    tarefa = get_task_by_id(id) 
     if not tarefa:
         flash("Tarefa não encontrada.")
         return redirect(url_for('index'))
@@ -65,9 +65,9 @@ def edit_task(id):
         novo_custo = float(request.form['custo'])  # Certifique-se de converter para float
         nova_data_limite = datetime.strptime(request.form['data_limite'], '%Y-%m-%d')
 
-        # Verifica se já existe uma tarefa com o mesmo nome, ignorando a tarefa atual
-        if Tarefa.query.filter(Tarefa.nome == novo_nome, Tarefa.id != tarefa.id).first():
-            flash("Erro: já existe uma tarefa com esse nome.")
+       # Verificar duplicação do nome
+        if Tarefa.query.filter_by(nome=tarefa.nome).first():
+            flash('Erro: Nome da tarefa já existe.')
             return redirect(url_for('edit_task', id=id))
 
         # Atualiza a tarefa se a validação passar

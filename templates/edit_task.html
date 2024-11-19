@@ -16,8 +16,7 @@
             <input type="text" name="nome" value="{{ tarefa.nome }}" required>
 
             <label for="custo">Custo (R$):</label>
-            <input type="text" name="custo" maxlength="16" oninput="validateNumberInput(this)" value="{{ tarefa.custo }}"  placeholder="Ex.: 999.99" min="0" required>
-
+            <input type="text" name="custo" maxlength="16" onchange="validateNumberInput(this)" value="{{ tarefa.custo }}" placeholder="Ex.: 999.99" min="0" required>
 
             <label for="data_limite">Data Limite:</label>
             <input type="date" name="data_limite" value="{{ tarefa.data_limite.strftime('%Y-%m-%d') }}" required>
@@ -30,22 +29,26 @@
             {% if messages %}
                 <script>
                     window.onload = function() {
-                        swal("Atenção!", "{{ messages[0] }}", "warning");
-                    }
+                        swal("Atenção!", "{{ messages[0] }}", "warning").then(function() {
+                            document.getElementsByName('nome')[0].focus();
+                        });
+                    };
                 </script>
             {% endif %}
         {% endwith %}
 
-        <script>
-            function validateNumberInput(input) {
-                // Remove caracteres não numéricos ou ponto
-                input.value = input.value.replace(/[^0-9.]/g, '');
-            }
-            window.onload = function() {
-                // Define o foco no campo "Nome"
-                document.getElementsByName('nome')[0].focus();
-            }
-        </script>
     </div>
+
+    <script>
+ 
+        function validateNumberInput(input) {
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }    
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementsByName('nome')[0].focus();
+        });
+
+    </script>
+    
 </body>
 </html>
