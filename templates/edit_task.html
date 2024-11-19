@@ -16,7 +16,8 @@
             <input type="text" name="nome" value="{{ tarefa.nome }}" required>
 
             <label for="custo">Custo (R$):</label>
-            <input type="number" step="0.01" name="custo" value="{{ tarefa.custo }}" required>
+            <input type="text" name="custo" maxlength="16" oninput="validateNumberInput(this)" value="{{ tarefa.custo }}"  placeholder="Ex.: 999.99" min="0" required>
+
 
             <label for="data_limite">Data Limite:</label>
             <input type="date" name="data_limite" value="{{ tarefa.data_limite.strftime('%Y-%m-%d') }}" required>
@@ -34,6 +35,17 @@
                 </script>
             {% endif %}
         {% endwith %}
+
+        <script>
+            function validateNumberInput(input) {
+                // Remove caracteres não numéricos ou ponto
+                input.value = input.value.replace(/[^0-9.]/g, '');
+            }
+            window.onload = function() {
+                // Define o foco no campo "Nome"
+                document.getElementsByName('nome')[0].focus();
+            }
+        </script>
     </div>
 </body>
 </html>

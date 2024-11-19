@@ -27,9 +27,9 @@
             </thead>
             <tbody>
                 {% for tarefa in tarefas %}
-                    <tr class="{% if tarefa.custo >= 1000 %}highlight{% endif %}">
+                <tr class="{% if tarefa.custo|float >= 1000 %}highlight{% endif %}">
                         <td>{{ tarefa.nome }}</td>
-                        <td>{{ tarefa.custo }}</td>
+                        <td>{{ '{:,.2f}'.format(tarefa.custo).replace(',', 'X').replace('.', ',').replace('X', '.') }}</td>
                         <td>{{ tarefa.data_limite.strftime('%d/%m/%Y') }}</td>
                         <td>
                             <a href="{{ url_for('edit_task', id=tarefa.id) }}" class="action-btn edit-btn">✏️ Editar</a>
