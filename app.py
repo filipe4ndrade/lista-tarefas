@@ -3,7 +3,7 @@ from models import db, Tarefa
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tarefas.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/tarefas.db'
 app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
 db.init_app(app)
 
