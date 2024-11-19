@@ -3,7 +3,7 @@ from models import db, Tarefa
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:////tmp/tarefas.db'
+app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:////temp/tarefas.db'
 app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
 db.init_app(app)
 
@@ -26,12 +26,18 @@ def new_task():
     if request.method == 'POST':
         nome = request.form['nome']
         custo = float(request.form['custo'])
-        data_limite = datetime.strptime(request.form['data_limite'], '%Y-%m-%d')
+        
+        try:
+            # Validação de data com múltiplos formatos
+            data_limite = validate_date(request.form['data_limite'])
+        except ValueError as e:
+            flash(str(e), 'error')
+            return render_template('new_task.html')
         
         # Validação e criação da tarefa
         if Tarefa.query.filter_by(nome=nome).first():
             flash('Erro: Nome da tarefa já existe.')
-            return redirect(url_for('new_task'))
+            return render_template('new_task.html')
         
         # Buscar a maior ordem atual
         nova_ordem = db.session.query(db.func.max(Tarefa.ordem)).scalar() or 0
@@ -63,7 +69,13 @@ def edit_task(id):
     if request.method == 'POST':
         novo_nome = request.form['nome']
         novo_custo = float(request.form['custo'])
-        nova_data_limite = datetime.strptime(request.form['data_limite'], '%Y-%m-%d')
+        
+        try:
+            # Validação de data com múltiplos formatos
+            nova_data_limite = validate_date(request.form['data_limite'])
+        except ValueError as e:
+            flash(str(e), 'error')
+            return render_template('edit_task.html', tarefa=tarefa)
 
         # Verificar duplicação do nome, ignorando o nome atual da tarefa
         nome_duplicado = Tarefa.query.filter(
@@ -72,7 +84,7 @@ def edit_task(id):
 
         if nome_duplicado:
             flash('Erro: Nome da tarefa já existe.')
-            return redirect(url_for('edit_task', id=id))
+            return render_template('edit_task.html', tarefa=tarefa)
 
         # Atualiza a tarefa se a validação passar
         tarefa.nome = novo_nome
@@ -109,6 +121,23 @@ def move_task(id, direction):
     
     return redirect(url_for('index'))
 
+#validação pra data
+def validate_date(date_string):
+
+    date_formats = [
+        '%Y-%m-%d',  #  YYYY-MM-DD
+        '%d/%m/%Y',  #  DD/MM/YYYY
+        '%d-%m-%Y',  #  DD-MM-YYYY
+        '%Y/%m/%d',  #  YYYY/MM/DD
+    ]
+    
+    for date_format in date_formats:
+        try:
+            return datetime.strptime(date_string, date_format)
+        except ValueError:
+            continue
+    
+    raise ValueError(f"Data inválida: {date_string}. Use o formato DD/MM/AAAA")
 
 if __name__ == "__main__":
     app.run()
