@@ -80,5 +80,31 @@ def edit_task(id):
 
     return render_template('edit_task.html', tarefa=tarefa)
 
+@app.route('/move_task/<int:id>/<direction>', methods=['POST'])
+def move_task(id, direction):
+    tarefa = Tarefa.query.get(id)
+    if not tarefa:
+        flash("Tarefa não encontrada.")
+        return redirect(url_for('index'))
+    
+    # Obtém a tarefa imediatamente anterior ou posterior à tarefa atual
+    if direction == 'up':
+        # Se mover para cima, encontramos a tarefa anterior
+        tarefa_anterior = Tarefa.query.filter(Tarefa.ordem < tarefa.ordem).order_by(Tarefa.ordem.desc()).first()
+        if tarefa_anterior:
+            # Troca as ordens
+            tarefa.ordem, tarefa_anterior.ordem = tarefa_anterior.ordem, tarefa.ordem
+            db.session.commit()
+    elif direction == 'down':
+        # Se mover para baixo, encontramos a tarefa posterior
+        tarefa_posterior = Tarefa.query.filter(Tarefa.ordem > tarefa.ordem).order_by(Tarefa.ordem.asc()).first()
+        if tarefa_posterior:
+            # Troca as ordens
+            tarefa.ordem, tarefa_posterior.ordem = tarefa_posterior.ordem, tarefa.ordem
+            db.session.commit()
+    
+    return redirect(url_for('index'))
+
+
 if __name__ == "__main__":
     app.run()
