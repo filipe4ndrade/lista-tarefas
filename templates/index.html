@@ -19,6 +19,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Nome da Tarefa</th>
                     <th>Custo (R$)</th>
                     <th>Data Limite</th>
@@ -28,6 +29,7 @@
             <tbody>
                 {% for tarefa in tarefas %}
                 <tr class="{% if tarefa.custo|float >= 1000 %}highlight{% endif %}">
+                        <td>{{ tarefa.id }}</td>
                         <td>{{ tarefa.nome }}</td>
                         <td>{{ '{:,.2f}'.format(tarefa.custo).replace(',', 'X').replace('.', ',').replace('X', '.') }}</td>
                         <td>{{ tarefa.data_limite.strftime('%d/%m/%Y') }}</td>
