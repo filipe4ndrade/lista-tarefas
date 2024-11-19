@@ -3,7 +3,7 @@ from models import db, Tarefa
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/tarefas.db'
+app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:////tmp/tarefas.db'
 app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
 db.init_app(app)
 
@@ -62,11 +62,15 @@ def edit_task(id):
 
     if request.method == 'POST':
         novo_nome = request.form['nome']
-        novo_custo = float(request.form['custo'])  # Certifique-se de converter para float
+        novo_custo = float(request.form['custo'])
         nova_data_limite = datetime.strptime(request.form['data_limite'], '%Y-%m-%d')
 
-       # Verificar duplicação do nome
-        if Tarefa.query.filter_by(nome=tarefa.nome).first():
+        # Verificar duplicação do nome, ignorando o nome atual da tarefa
+        nome_duplicado = Tarefa.query.filter(
+            (Tarefa.nome == novo_nome) & (Tarefa.id != tarefa.id)
+        ).first()
+
+        if nome_duplicado:
             flash('Erro: Nome da tarefa já existe.')
             return redirect(url_for('edit_task', id=id))
 
