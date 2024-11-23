@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, Tarefa
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =  'sqlite:////tmp/tarefas.db'
@@ -25,7 +26,12 @@ def index():
 def new_task():
     if request.method == 'POST':
         nome = request.form['nome']
-        custo = float(request.form['custo'])
+        
+        try:
+            custo = validate_cost(request.form['custo_hidden'])
+        except ValueError as e:
+            flash('Valor de custo inválido')
+            return render_template('new_task.html')
         
         try:
             # Validação de data com múltiplos formatos
@@ -68,7 +74,14 @@ def edit_task(id):
 
     if request.method == 'POST':
         novo_nome = request.form['nome']
-        novo_custo = float(request.form['custo'])
+        
+        # Converte o valor do formato brasileiro para float
+        custo_str = request.form['custo_hidden']  # Usa o campo hidden que já está no formato correto
+        try:
+            novo_custo = validate_cost(request.form['custo_hidden'])
+        except ValueError:
+            flash('Valor de custo inválido')
+            return render_template('edit_task.html', tarefa=tarefa)
         
         try:
             # Validação de data com múltiplos formatos
@@ -121,7 +134,6 @@ def move_task(id, direction):
     
     return redirect(url_for('index'))
 
-#validação pra data
 def validate_date(date_string):
 
     date_formats = [
@@ -138,6 +150,17 @@ def validate_date(date_string):
             continue
     
     raise ValueError(f"Data inválida: {date_string}. Use o formato DD/MM/AAAA")
+
+def validate_cost(cost_str):
+    try:
+ 
+        cost = Decimal(cost_str)
+
+        cost = cost.quantize(Decimal('0.01'))
+        return cost
+    except (ValueError, InvalidOperation):
+        raise ValueError('Valor de custo inválido')
+        
 
 if __name__ == "__main__":
     app.run()

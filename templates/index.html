@@ -41,12 +41,12 @@
                                 <button onclick="confirmDelete('{{ tarefa.id }}')" class="action-btn delete-btn">🗑️ Excluir</button>
                             </div>
                             <div class="move-actions">
-                                <form action="{{ url_for('move_task', id=tarefa.id, direction='up') }}" method="post" style="display:inline;">
+                                <form action="{{ url_for('move_task', id=tarefa.id, direction='up') }}" method="post">
                                     <button type="submit" class="action-btn move-btn" {% if loop.first %} disabled {% endif %}>
                                         <i class="fas fa-arrow-up"></i> 
                                     </button>
                                 </form>
-                                <form action="{{ url_for('move_task', id=tarefa.id, direction='down') }}" method="post" style="display:inline;">
+                                <form action="{{ url_for('move_task', id=tarefa.id, direction='down') }}" method="post">
                                     <button type="submit" class="action-btn move-btn" {% if loop.last %} disabled {% endif %}>
                                         <i class="fas fa-arrow-down"></i>
                                     </button>

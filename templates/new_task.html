@@ -23,11 +23,14 @@
 
             <div class="form-group">
                 <label for="custo">Custo (R$):</label>
-                <input type="text" id="custo" name="custo" maxlength="16" 
-                       onchange="validateNumberInput(this)" 
-                       placeholder="Ex.: 999.99" 
-                       min="0" 
+                <input type="text" id="custo" name="custo" 
+                       maxlength="16" 
+                       oninput="formatarMoeda(this)"
+                       onblur="formatarMoedaOnBlur(this)"
+                       value="0,00"
+                       placeholder="R$ 0,00" 
                        required>
+                <input type="hidden" id="custo_hidden" name="custo_hidden">
             </div>
 
             <div class="form-group">
@@ -58,20 +61,70 @@
         {% endwith %}
     </div>
 
+    
     <script>
-        function validateNumberInput(input) {
-            // Permite apenas números e ponto decimal
-            input.value = input.value.replace(/[^0-9.]/g, '');
+        function formatarMoeda(input) {
+
+            let valor = input.value.replace(/\D/g, '');
             
-            // Garante apenas um ponto decimal
-            const parts = input.value.split('.');
-            if (parts.length > 2) {
-                input.value = parts[0] + '.' + parts.slice(1).join('').replace(/\./g, '');
+       
+            if (valor === '') {
+                valor = '0';
             }
+     
+            let valorNumerico = BigInt(valor);
+            
+    
+            let parteInteira = valorNumerico / BigInt(100);
+            let centavos = valor.slice(-2).padStart(2, '0');
+            
+    
+            let valorFormatado = parteInteira.toString() + ',' + centavos;
+            
+    
+            valorFormatado = valorFormatado.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            
+            input.value = valorFormatado;
+
+            document.getElementById('custo_hidden').value = valorFormatado.replace(/\./g, '').replace(',', '.');
         }
+
+        function formatarMoedaOnBlur(input) {
+            if (input.value === '' || input.value === '0') {
+                input.value = '0,00';
+                document.getElementById('custo_hidden').value = '0.00';
+                return;
+            }
+            
+            let valor = input.value;
+            if (!valor.includes(',')) {
+                valor += ',00';
+            } else {
+                let partes = valor.split(',');
+                if (partes[1].length === 1) {
+                    valor += '0';
+                }
+            }
+            input.value = valor;
+            document.getElementById('custo_hidden').value = valor.replace(/\./g, '').replace(',', '.');
+        }
+
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            let custoInput = document.getElementById('custo');
+            let custoHidden = document.getElementById('custo_hidden');
+            
+ 
+            let valor = custoInput.value.replace(/\./g, '').replace(',', '.');
+            custoHidden.value = valor;
+        });
 
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('nome').focus();
+            
+            let custoInput = document.getElementById('custo');
+            let custoHidden = document.getElementById('custo_hidden');
+            custoHidden.value = '0.00';
         });
     </script>
 </body>

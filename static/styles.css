@@ -11,6 +11,7 @@ body {
 }
 
 .container {
+    width: 95%;
     max-width: 800px;
     margin: 40px auto;
     padding: 20px;
@@ -23,14 +24,16 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 .button-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 10px;
 }
 
 .btn {
@@ -44,6 +47,7 @@ h1 {
     border: none;
     font-weight: 600;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    text-align: center;
 }
 
 .btn:hover {
@@ -62,6 +66,7 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
 }
 
 th, td {
@@ -88,12 +93,32 @@ th {
     to { background-color: #fff3cd; }
 }
 
+.action-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.primary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 5px;
+    gap: 5px;
+}
+
+.move-actions {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
 .action-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 8px 16px;
-    margin: 0 4px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -101,6 +126,7 @@ th {
     font-size: 0.9rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-decoration: none;
+    min-width: 80px;
 }
 
 .edit-btn {
@@ -139,15 +165,21 @@ th {
     margin-right: 5px;
 }
 
-/* Responsividade */
-@media (max-width: 600px) {
+/* Responsiveness for Small Screens */
+@media (max-width: 768px) {
     .container {
-        margin: 20px 10px;
+        width: 98%;
+        margin: 20px auto;
         padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
     }
 
     .button-container {
         flex-direction: column;
+        gap: 10px;
     }
 
     .btn {
@@ -155,14 +187,72 @@ th {
         margin-bottom: 10px;
     }
 
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .action-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .primary-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .primary-actions .action-btn {
+        width: 100%;
+    }
+
+    .move-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+    }
+
+    .move-actions form {
+        flex-grow: 1;
+    }
+
+    .move-actions .action-btn {
+        width: 100%;
+    }
+}
+
+/* Smaller Mobile Screens */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
     .action-btn {
-        margin: 2px;
+        font-size: 0.8rem;
         padding: 6px 12px;
     }
 }
 
 .form-container {
     max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .form-group {
@@ -192,8 +282,10 @@ th {
 
 .form-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 20px;
+    gap: 10px;
 }
 
 .btn-primary {
@@ -206,38 +298,13 @@ th {
     color: white;
 }
 
-/* Ícones nos botões */
-.btn i {
-    margin-right: 8px;
-}
-
-/* Estilo para telas menores */
-@media (max-width: 600px) {
+@media (max-width: 480px) {
     .form-actions {
         flex-direction: column;
+        gap: 10px;
     }
 
     .form-actions .btn {
         width: 100%;
-        margin-bottom: 10px;
     }
-}
-
-.action-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.primary-actions {
-    display: flex;
-    margin-bottom: 5px;
-}
-
-.move-actions {
-    display: flex;
-}
-
-.action-btn {
-    margin-right: 5px;
 }
